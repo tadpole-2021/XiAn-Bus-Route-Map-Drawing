@@ -24,8 +24,11 @@
 ### 优化
 
 通过网上的学习实现了分离公交后的单色的3D地图。
+![单色的3D地图](https://github.com/tadpole-2021/XiAn-Bus-Route-Map-Drawing/blob/main/%E4%BC%98%E5%8C%96/3d%E5%8D%95%E6%95%88%E6%9E%9C%E5%9B%BE.png)
 再接着实现出了各公交线路颜色的区别的多色的3D地图。
+![多色的3D地图](https://github.com/tadpole-2021/XiAn-Bus-Route-Map-Drawing/blob/main/%E4%BC%98%E5%8C%96/3d%E5%A4%9A%E6%95%88%E6%9E%9C%E5%9B%BE.png)
 根据这个设计思路修改第4块的代码，实现了公交线路分离【公交网络地图公交线路分离.html】（并没有放在效果页去展示，加载页面数据比较慢）
+![公交线路分离](https://github.com/tadpole-2021/XiAn-Bus-Route-Map-Drawing/blob/main/%E4%BC%98%E5%8C%96/2d%E7%BA%BF%E8%B7%AF%E5%88%86%E7%A6%BB%E6%95%88%E6%9E%9C%E5%9B%BE.png)
 
 在最终的index.html显示时我在3dmap.html中手动加了一段js让显示更清晰直观
 
