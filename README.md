@@ -7,7 +7,7 @@
  1.需要使用Driver进行数据爬取【chromedriver.exe】
 下载与自己电脑版本匹配的ChromeDrive：https://googlechromelabs.github.io/chrome-for-testing/
 	
-2.使用【code.py】爬取（https://xian.8684.cn/）西安的公交站信息保存到文件【xian_bus_info.csv】
+2.使用【code.py】爬取（ https://xian.8684.cn/ ）西安的公交站信息保存到文件【xian_bus_info.csv】
 	
 3.使用【bus_data.py】对【index.html】进行爬取公交站点的经纬度保存到文件【bus_stations_lines.xlsx】
 	
