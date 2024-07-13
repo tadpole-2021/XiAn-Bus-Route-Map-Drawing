@@ -1,6 +1,6 @@
 ## index.html【最终的效果展示】
 
-![效果图](.\效果图.png)
+![效果图](https://github.com/tadpole-2021/Xi-an-Bus-Route-Map-Drawing/blob/main/%E6%95%88%E6%9E%9C%E5%9B%BE.png)
 
 ### 3dmap.html / 第1块结果
 	
