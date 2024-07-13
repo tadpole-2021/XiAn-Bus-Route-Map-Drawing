@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>获取公交信息</title>
+</head>
+<body>
+<p><img src="http://map.baidu.com/img/logo-map.gif" /><span style="display:inline-block;width:200px;"></span><input type="text" value="10" id="busId" />路公交<input type="button" value="查询" onclick="busSearch();" /></p>
+<div style="float:left;width:600px;height:500px;border:1px solid gray" id="container"></div>
+<div id="results" style="float:left;width:300px;height:500px;font-size:13px;"></div>
+<!--获取坐标系转换js包    详见github：https://github.com/hujiulong/gcoord  -->
+<!--<script src="https://unpkg.com/gcoord/dist/gcoord.js"></script>-->
+<script src="gcoord.js"></script>
+<!--本地加载jquery-->
+<script src='jquery-1.8.3.js'></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=1.2"></script>
+<!--本地加载js-xlsx包  使用以及获取方法见：https://www.cnblogs.com/liuxianan/p/js-excel.html-->
+<script src ='xlsx.full.min.js'></script>
+<script src ='xlsx.core.min.js'></script>
+            <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=qHtW91EWyKE7F5zA5isphMqjmnQsupLf"></script>
+            <script type="text/javascript" src="https://api.map.baidu.com/getscript?v=2.0&ak=qHtW91EWyKE7F5zA5isphMqjmnQsupLf"></script>
+<script>
+    /*将爬取的西安公交信息进行转换*/
+    var line_data_list = []
+    var line_name_list = []   //获取公交线路名称
+
+    $.ajax(
+        {
+            url:encodeURI('xian.txt'),
+            async: false,
+            success: function (xian) {
+                row_split =  xian.split('\n')
+                for(var i in row_split){
+                    line_data_list.push(JSON.parse(row_split[i]))
+                    var len =  JSON.parse(row_split[i]).线路名称[0].length
+                    line_data_list[i].线路名称 = JSON.parse(row_split[i]).线路名称[0].substring(2,len-5)
+                    //’西安10路公交车路线‘->’10路‘
+                }
+
+                for(var i in line_data_list){
+                    line_name_list.push(line_data_list[i].线路名称)
+                }
+            }
+
+        }
+    )
+
+    /*获取百度地图实例*/
+    var map = new BMap.Map("container");
+    map.centerAndZoom(new BMap.Point(108.946465, 34.347269), 12); //西安市
+
+    var line_data_ass = []  //存储最终数据的集合
+
+    function get_bus_line_data(line_name,line_point,sta_info) {
+
+        var sta_info_,sta_name,sta_position;
+        //更改数据结构  [{}] --> {}  && 去除最后一个空数组
+        sta_info_ = sta_info.slice(0,sta_info.length - 1).map(function (re) {
+            return re[0]
+        });
+        //获取每一站点名称
+        sta_name = sta_info_.map(function (re) {
+            return re.name.toString()
+        });
+        // 获取站点坐标
+        sta_position = sta_info_.map(function (re) {
+            return fromBd09ToWgs84([re.position.lng,re.position.lat])
+            // return [re.position.lng,re.position.lat]  //若不需要转换坐标系，使用此行代码
+        });
+
+        line_data_ass.push(
+            {
+                name: line_name,
+                line_point: line_point.map(function (re) {
+                    return fromBd09ToWgs84([re.lng, re.lat])
+                    // return fromBd09ToWgs84([re.lng, re.lat]) //若不需要转换坐标系，使用此行代码
+                }),
+                sta_name : sta_name,
+                sta_point : sta_position,
+            });
+        console.log(line_name);  //在控制台输出成功获取的公交线路信息的名称
+    }
+
+    // 公交信息获取类
+    var busline = new BMap.BusLineSearch("西安",{
+        // 展示获取的公交线路,自动生成面板到id=results的element上,不必须使用
+        renderOptions:{map:map,panel:"results"},
+        // 设置公交列表查询后的回调函数，注意与公交线路查询区分，公交列表存储多个具体的公交对象，公交对象可理解为公交线路。
+        onGetBusListComplete: function(result){
+            if(result) {
+                /*获取查询出的公交列表中的对象 0代表上行 1代表下行，
+                实际上还可能存在getBusListItem(2)、getBusListItem(3)等等，代表的是模糊查询的结果，
+                例如查询 10路时，getBusListItem(0)、(1)返回的是10路的上下行的公交线路，
+                而(2)(3)返回的是b10路，具体可参考代码块后的贴图*/
+
+                //获取查询出的公交列表中的第一个对象，即下行线路
+                let up_Line = result.getBusListItem(0);
+                //获取查询出的公交列表中的第一个对象，即下行线路
+                let down_Line = result.getBusListItem(1);
+                if(typeof up_Line === "object"){  //判断查询结果是否存在
+                    busline.getBusLine(up_Line);  //执行公交线路查询
+                }else{
+                    //在控制台输出无法查询的线路名称，result.keyword 即在查询时输入的线路名
+                    console.log("查无此公交:"+result.keyword)
+                }
+                if(typeof down_Line === "object"){
+                    busline.getBusLine(down_Line);
+                }else{
+                    //部分公交线路不存在下行线路，输出观察
+                    console.log("此公交无下行或不存在:"+result.keyword)
+                }
+            }
+        },
+        //设置公交线路查询后的回调函数，即执行 busline.getBusLine(up_Line) 后执行的函数
+        onGetBusLineComplete : function (ret) {
+            let line_name = ret.name;
+            let line_point = ret.getPath();  //获取公交路线坐标
+            let i = ret.getNumBusStations();
+            let sta_info = [];
+            for(j=0;j <= i;j++){
+                sta_info.push([ret.getBusStation(j)]);
+            }
+            get_bus_line_data(line_name,line_point,sta_info); //对数据进行组织
+        }
+    });
+
+    /*------------------执行层------------------------------------*/
+
+    // 数据导入数组开始
+    //slice
+    for (var i in line_name_list.slice(0,5)){
+        busline.getBusList(line_name_list[i]);
+        console.log(i)
+    }
+    console.log("done")
+
+    /*-------------------功能函数---------------------------------*/
+
+    /*页面操作调用的函数*/
+    function busSearch(){
+        var busName = document.getElementById("busId").value;
+        busline.getBusList(busName);
+    }
+
+    /*坐标转换函数*/
+    function fromBd09ToWgs84(arr) {
+        var result = gcoord.transform(
+            arr,    // 经纬度坐标
+            gcoord.BD09,                 // 当前坐标系
+            gcoord.WGS84                   // 目标坐标系
+        );
+        return result;
+    }
+</script>
+</body>
+</html>
