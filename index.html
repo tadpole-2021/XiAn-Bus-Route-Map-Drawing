@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<style>
+		.container {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-template-rows: 1fr 1fr;
+			grid-gap: 0px;
+			width: 100vw;
+			height: 100vh;
+		}
+		.box {
+			border: 1px solid #ccc;
+		}
+		.box img, .box iframe {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="box">
+			<iframe src="./3dmap.html" frameborder="0" scrolling="auto" style="width: 100%;height: 100%"></iframe>
+		</div>
+		<div class="box">
+			<iframe src="https://j.map.baidu.com/cb/W6A" frameborder="0" scrolline="auto" style="width: 100%;height: 100%"></iframe>
+		</div>
+		<div class="box">
+			<img src="./经纬度散点图.png" alt="经纬度散点图">
+		</div>
+		<div class="box">
+			<iframe src="./%E5%85%AC%E4%BA%A4%E7%BD%91%E7%BB%9C%E5%9C%B0%E5%9B%BE.html" frameborder="0" scrolling="auto" style="width: 100%;height: 100%"></iframe>
+		</div>
+	</div>
+</body>
+</html>
