@@ -3,25 +3,29 @@
 ![效果图](.\效果图.png)
 
 ### 3dmap.html / 第1块结果
-	1.需要使用Driver进行数据爬取【chromedriver.exe】
-	下载与自己电脑版本匹配的ChromeDrive：https://googlechromelabs.github.io/chrome-for-testing/
 	
-	2.使用【code.py】爬取（https://xian.8684.cn/）西安的公交站信息保存到文件【xian_bus_info.csv】
+ 1.需要使用Driver进行数据爬取【chromedriver.exe】
+下载与自己电脑版本匹配的ChromeDrive：https://googlechromelabs.github.io/chrome-for-testing/
 	
-	3.使用【bus_data.py】对【index.html】进行爬取公交站点的经纬度保存到文件【bus_stations_lines.xlsx】
+2.使用【code.py】爬取（https://xian.8684.cn/）西安的公交站信息保存到文件【xian_bus_info.csv】
 	
-	4.使用【3D.py】进行公交线路的绘制，保存结果到【3dmap.html】
+3.使用【bus_data.py】对【index.html】进行爬取公交站点的经纬度保存到文件【bus_stations_lines.xlsx】
+	
+4.使用【3D.py】进行公交线路的绘制，保存结果到【3dmap.html】
 
 ### 经纬度散点图.png / 第3块结果
 
-	将第一块中所获取的公交数据进行经纬度的散点图的绘制【经纬度image.py】，查看公交站点的分布情况，生成图像为【经纬度散点图.png】
+将第一块中所获取的公交数据进行经纬度的散点图的绘制【经纬度image.py】，查看公交站点的分布情况，生成图像为【经纬度散点图.png】
 
 ### 公交网络地图.html / 第4块结果
-	利用百度的AK进行动态的图像绘制公交线路图【公交网络地图.html】
+
+利用百度的AK进行动态的图像绘制公交线路图【公交网络地图.html】
+
 ### 优化
-	通过网上的学习实现了分离公交后的单色的3D地图。
-	再接着实现出了各公交线路颜色的区别的多色的3D地图。
-	根据这个设计思路修改第4块的代码，实现了公交线路分离【公交网络地图公交线路分离.html】（并没有放在效果页去展示，加载页面数据比较慢）
+
+通过网上的学习实现了分离公交后的单色的3D地图。
+再接着实现出了各公交线路颜色的区别的多色的3D地图。
+根据这个设计思路修改第4块的代码，实现了公交线路分离【公交网络地图公交线路分离.html】（并没有放在效果页去展示，加载页面数据比较慢）
 
 在最终的index.html显示时我在3dmap.html中手动加了一段js让显示更清晰直观
 
